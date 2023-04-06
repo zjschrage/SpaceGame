@@ -74,19 +74,6 @@ public class User implements Runnable {
         }
     }
 
-    private void notifyDisconnect(byte id) {
-        Message m = new Message();
-        m.src = id;
-        m.dst = -1;
-        m.scope = (byte) MessageScope.BROADCAST.ordinal();
-        m.type = (byte) MessageType.DISCONNECT.ordinal();
-        try {
-            send(serverOut, m);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private boolean interpret(byte[] stream) throws IOException {
         try {
             Message m = new Message(stream);
