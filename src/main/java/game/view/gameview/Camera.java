@@ -1,4 +1,4 @@
-package game.view;
+package game.view.gameview;
 
 import game.model.entities.Entity;
 

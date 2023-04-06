@@ -2,7 +2,7 @@ package game.utils;
 
 import game.model.entities.Ship;
 import game.model.world.WorldState;
-import game.view.ViewField;
+import game.view.gameview.GameViewField;
 
 import java.util.Map;
 
@@ -12,14 +12,14 @@ public class Handler {
     private Map<Integer, Ship> playerShips;
     private WorldState worldState;
 
-    public Handler(Ship ownShip, Map<Integer, Ship> playerShips, WorldState worldState, ViewField field) {
+    public Handler(Ship ownShip, Map<Integer, Ship> playerShips, WorldState worldState, GameViewField field) {
         this.ownShip = ownShip;
         this.playerShips = playerShips;
         this.worldState = worldState;
         this.field = field;
     }
 
-    private ViewField field;
+    private GameViewField field;
 
     public Ship getOwnShip() {
         return ownShip;
@@ -33,7 +33,7 @@ public class Handler {
         return worldState;
     }
 
-    public ViewField getField() {
+    public GameViewField getField() {
         return field;
     }
 

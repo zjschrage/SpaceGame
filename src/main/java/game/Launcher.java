@@ -1,8 +1,9 @@
 package game;
 
 import game.net.client.Client;
-import game.net.message.MessageType;
 import game.state.GameState;
+import game.state.Looper;
+import game.state.State;
 import game.utils.Handler;
 
 import java.io.IOException;
@@ -12,12 +13,12 @@ public class Launcher {
     public static void main(String[] args) throws IOException {
 
         GameState game = new GameState();
-        Thread gThread = new Thread(game);
+        State.setState(game);
+        Thread gThread = new Thread(new Looper());
 
         Handler handler = new Handler(game.getShip(), game.getPlayerShips(), game.getWorldState(), game.getViewField());
-        //Handler handler = game.initHandler();
 
-        Client client = new Client("10.200.105.21", 5000);
+        Client client = new Client("10.200.89.126", 5000);
         client.setupClientReciever(handler);
 
         game.associateClient(client);

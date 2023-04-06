@@ -4,7 +4,7 @@ import game.model.utils.Coordinate;
 import game.model.world.WorldState;
 import game.utils.EntityFactories;
 import game.utils.EntityFactory;
-import game.view.ViewField;
+import game.view.gameview.GameViewField;
 
 import java.io.*;
 import java.util.HashMap;
@@ -17,11 +17,11 @@ public class WorldParser {
     private BufferedReader br;
     private Map<Integer, EntityFactory> factoryFunctionMapper;
     private WorldState worldState;
-    private ViewField field;
+    private GameViewField field;
     private int tilesInRow;
     private int tilesInCol;
 
-    public WorldParser(String path, WorldState worldState, ViewField field) throws FileNotFoundException {
+    public WorldParser(String path, WorldState worldState, GameViewField field) throws FileNotFoundException {
         this.br = new BufferedReader(new InputStreamReader(WorldParser.class.getResourceAsStream(WORLD_FILE_PATH + path)));
         this.factoryFunctionMapper = new HashMap<>();
         this.worldState = worldState;

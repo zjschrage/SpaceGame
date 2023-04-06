@@ -1,4 +1,4 @@
-package game.view;
+package game.view.gameview;
 
 import game.view.entityview.Drawable;
 
@@ -7,13 +7,13 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class ViewField extends JPanel {
+public class GameViewField extends JPanel {
 
     private ResourceBundle res = ResourceBundle.getBundle("view_properties");
     private Camera camera;
     private List<Drawable> entitiesList;
 
-    public ViewField(Camera camera) {
+    public GameViewField(Camera camera) {
         int x = Integer.parseInt(res.getString("FRAME_X"));
         int y = Integer.parseInt(res.getString("FRAME_Y"));
         setSize(x, y);
