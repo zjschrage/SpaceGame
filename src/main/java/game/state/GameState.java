@@ -48,9 +48,14 @@ public class GameState implements Runnable {
         this.client = client;
     }
 
-    public Handler initHandler() {
-        return new Handler(ship, playerShips, worldState, field);
-    }
+//    public Handler initHandler() {
+//        return new Handler(ship, playerShips, worldState, field);
+//    }
+
+    public Ship getShip() {return ship;}
+    public Map<Integer, Ship> getPlayerShips() {return playerShips;}
+    public WorldState getWorldState() {return worldState;}
+    public ViewField getViewField() {return field;}
 
     private void init() {
         assets = new Assets();

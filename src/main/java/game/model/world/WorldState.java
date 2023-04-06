@@ -21,7 +21,7 @@ public class WorldState {
     }
 
     public boolean checkEntityColliding(Entity collider, Rectangle bounds) {
-        //checkActive();
+        checkActive();
         for (Entity e : entities) {
             if (e.equals(collider)) continue;
             if (e.getHBox().intersects(bounds)) return true;
