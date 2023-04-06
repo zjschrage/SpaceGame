@@ -15,12 +15,14 @@ public class WallView implements Drawable, Listener<Integer> {
     private Coordinate centroid;
     private Coordinate position;
     private Rectangle hitbox;
+    private boolean active;
 
     public WallView(Coordinate c) {
         this.image = Assets.getImage(AssetEnums.WALL);
         this.centroid = new Coordinate(image.getWidth()/2, image.getHeight()/2);
         this.position = c;
         this.hitbox = new Rectangle((int)c.x()-16, (int)c.y()-16, 32, 32);
+        this.active = true;
     }
 
     @Override
@@ -39,8 +41,18 @@ public class WallView implements Drawable, Listener<Integer> {
     }
 
     @Override
+    public boolean getActive() {
+        return active;
+    }
+
+    @Override
     public void update(Integer oldInfo, Integer newInfo) {
 
+    }
+
+    @Override
+    public void destroy() {
+        active = false;
     }
 
 }

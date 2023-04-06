@@ -35,7 +35,7 @@ public class Server {
                 serverIn = new DataInputStream(socket.getInputStream());
                 serverOut = new DataOutputStream(socket.getOutputStream());
 
-                User user = new User(serverIn, serverOut, users, idCounter);
+                User user = new User(socket, serverIn, serverOut, users, idCounter);
                 users.put(idCounter++, user);
                 new Thread(user).start();
             }

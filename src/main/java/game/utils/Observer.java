@@ -15,8 +15,11 @@ public class Observer<T> {
         listeners.add(listener);
     }
 
-    public void removeListener(Listener listener) {
-        listeners.remove(listener);
+    public void detatchListeners() {
+        for (Listener l : listeners) {
+            l.destroy();
+        }
+        listeners = new ArrayList<>();
     }
 
     public void notifyListeners(T oldInfo, T newInfo) {

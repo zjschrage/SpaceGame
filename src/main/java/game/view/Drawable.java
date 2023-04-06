@@ -11,4 +11,6 @@ public interface Drawable {
     public Rectangle getHitBox();
     public Coordinate getDrawPosition();
 
+    public boolean getActive();
+
 }

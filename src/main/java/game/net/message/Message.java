@@ -25,6 +25,7 @@ public class Message {
     }
 
     public Message(byte[] bstream) {
+        if (bstream.length < HDR_ENTRIES) throw new IllegalArgumentException();
         this.src = bstream[0];
         this.dst = bstream[1];
         this.scope = bstream[2];
