@@ -21,6 +21,8 @@ public class Ship extends Observer<Info> implements Entity {
     private double b_decay = 0.99;
     private double epsilon_decay = 0.2;
 
+    private boolean active;
+
 
     public Ship(WorldState worldState, Coordinate c) {
         this.worldState = worldState;
@@ -28,6 +30,7 @@ public class Ship extends Observer<Info> implements Entity {
         this.c = c;
         this.hp = 100;
         this.velocity = new Vector(0, 0);
+        this.active = true;
     }
 
     @Override
@@ -46,6 +49,11 @@ public class Ship extends Observer<Info> implements Entity {
     public Vector getVelocity() {
         return velocity;
     }
+
+    @Override
+    public boolean getActive() { return active; }
+
+    public void setInactive() {active = false;}
 
     public void accelerate(Vector accel) {
         double x = velocity.x() + accel.x();

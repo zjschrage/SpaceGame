@@ -17,6 +17,7 @@ public class DisconnectTimer {
                 for (Integer i : timeout.keySet()) {
                     if (System.currentTimeMillis() - timeout.get(i) > TIMEOUT) {
                         handler.getPlayerShips().get(i).detatchListeners();
+                        handler.getPlayerShips().get(i).setInactive();
                         handler.getPlayerShips().remove(i);
                         removeQueue.add(i);
                         System.out.println("Player with ID " + i + " Disconnected");
