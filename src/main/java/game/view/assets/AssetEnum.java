@@ -1,6 +1,6 @@
 package game.view.assets;
 
-public enum AssetEnums {
+public enum AssetEnum {
     SHIP,
     WALL;
 }

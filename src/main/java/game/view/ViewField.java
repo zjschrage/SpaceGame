@@ -1,5 +1,7 @@
 package game.view;
 
+import game.view.entityview.Drawable;
+
 import javax.swing.JPanel;
 import java.awt.*;
 import java.util.*;
@@ -34,13 +36,17 @@ public class ViewField extends JPanel {
     }
 
     private void checkActive() {
-        Queue<Drawable> destroyQueue = new LinkedList<>();
-        for (Drawable e : entitiesList) {
-            if (!e.getActive()) destroyQueue.add(e);
-        }
-        while (!destroyQueue.isEmpty()) {
-            Drawable d = destroyQueue.poll();
-            entitiesList.remove(d);
+        try {
+            Queue<Drawable> destroyQueue = new LinkedList<>();
+            for (Drawable e : entitiesList) {
+                if (!e.getActive()) destroyQueue.add(e);
+            }
+            while (!destroyQueue.isEmpty()) {
+                Drawable d = destroyQueue.poll();
+                entitiesList.remove(d);
+            }
+        } catch (ConcurrentModificationException e) {
+
         }
     }
 

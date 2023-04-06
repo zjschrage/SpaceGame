@@ -14,7 +14,7 @@ public class Launcher {
         GameState game = new GameState();
         Thread gThread = new Thread(game);
 
-        Handler handler = new Handler(game.getShip(), game.getPlayerShips(), game.getWorldState(), game.getViewField());
+        Handler handler = game.initHandler();
 
         Client client = new Client("10.200.105.21", 5000);
         client.setupClientReciever(handler);

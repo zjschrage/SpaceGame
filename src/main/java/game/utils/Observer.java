@@ -15,7 +15,7 @@ public class Observer<T> {
         listeners.add(listener);
     }
 
-    public void detatchListeners() {
+    public void detachListeners() {
         for (Listener l : listeners) {
             l.destroy();
         }

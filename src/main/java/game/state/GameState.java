@@ -9,6 +9,7 @@ import game.net.client.Client;
 import game.net.message.MessageType;
 import game.parser.WorldParser;
 import game.utils.EntityFactories;
+import game.utils.Handler;
 import game.view.Camera;
 import game.view.ViewField;
 import game.view.ViewFrame;
@@ -47,36 +48,8 @@ public class GameState implements Runnable {
         this.client = client;
     }
 
-    /**
-     * Getter for the players own ship
-     * @return ship
-     */
-    public Ship getShip() {
-        return ship;
-    }
-
-    /**
-     * Getter for the multiplayer ships map structure
-     * @return multiplayer ships map
-     */
-    public Map<Integer, Ship> getPlayerShips() {
-        return playerShips;
-    }
-
-    /**
-     * Getter to the core backend object
-     * @return backend entities manager
-     */
-    public WorldState getWorldState() {
-        return worldState;
-    }
-
-    /**
-     * Getter to the core frontend object
-     * @return frontend JPanel
-     */
-    public ViewField getViewField() {
-        return field;
+    public Handler initHandler() {
+        return new Handler(ship, playerShips, worldState, field);
     }
 
     private void init() {

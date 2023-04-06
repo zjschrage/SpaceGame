@@ -1,7 +1,6 @@
 package game.model.world;
 
 import game.model.entities.Entity;
-import game.view.Drawable;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -20,13 +19,9 @@ public class WorldState {
     public void addEntity(Entity e) {
         entities.add(e);
     }
-    
-    public List<Entity> getEntity() {
-        return entities;
-    }
 
     public boolean checkEntityColliding(Entity collider, Rectangle bounds) {
-        checkActive();
+        //checkActive();
         for (Entity e : entities) {
             if (e.equals(collider)) continue;
             if (e.getHBox().intersects(bounds)) return true;

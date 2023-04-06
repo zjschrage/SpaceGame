@@ -39,11 +39,6 @@ public class Camera {
         else if (yOffset > (tilesInCol+2)*32 - height) yOffset = (tilesInCol+2)*32 - height;
     }
 
-    public void move(double xDist, double yDist) {
-        xOffset += xDist;
-        yOffset += yDist;
-    }
-
     public double getXOffset() {
         return xOffset;
     }

@@ -7,53 +7,29 @@ import game.utils.Info;
 import game.utils.Observer;
 import java.awt.*;
 
-public class Ship extends Observer<Info> implements Entity {
+public class Ship extends Entity<Info> {
 
     private static final double MAXIMUM_VELOCITY = 6;
 
     private WorldState worldState;
-    private Rectangle hitbox;
-    private Coordinate c;
     private int hp;
-
     private Vector velocity;
+
     private double a_decay = 0.94;
     private double b_decay = 0.99;
     private double epsilon_decay = 0.2;
 
-    private boolean active;
-
 
     public Ship(WorldState worldState, Coordinate c) {
+        super(c);
         this.worldState = worldState;
-        this.hitbox = new Rectangle((int)c.x() - 16, (int)c.y() - 16, 32, 32);
-        this.c = c;
         this.hp = 100;
         this.velocity = new Vector(0, 0);
-        this.active = true;
-    }
-
-    @Override
-    public Rectangle getHBox() {
-        return hitbox;
-    }
-
-    public Coordinate getCoordinate() {
-        return c;
     }
 
     public int getHp() {
         return hp;
     }
-
-    public Vector getVelocity() {
-        return velocity;
-    }
-
-    @Override
-    public boolean getActive() { return active; }
-
-    public void setInactive() {active = false;}
 
     public void accelerate(Vector accel) {
         double x = velocity.x() + accel.x();
@@ -70,30 +46,25 @@ public class Ship extends Observer<Info> implements Entity {
 
     public void move() {
         airResistance();
-        Rectangle transBoundsX = new Rectangle(hitbox);
-        Rectangle transBoundsY = new Rectangle(hitbox);
+        Rectangle transBoundsX = new Rectangle(getHBox());
+        Rectangle transBoundsY = new Rectangle(getHBox());
         transBoundsX.translate((int) (velocity.x()*(MAXIMUM_VELOCITY)/2), 0);
         transBoundsY.translate(0, (int) (velocity.y()*(MAXIMUM_VELOCITY)/2));
         boolean xColliding = worldState.checkEntityColliding(this, transBoundsX);
         boolean yColliding = worldState.checkEntityColliding(this, transBoundsY);
-        double newX = c.x() + velocity.x();
-        double newY = c.y() + velocity.y();
+        double newX = getCoordinate().x() + velocity.x();
+        double newY = getCoordinate().y() + velocity.y();
         if (xColliding) {
-            newX = c.x() - velocity.x();
+            newX = getCoordinate().x() - velocity.x();
             velocity = new Vector(velocity.x()/2, velocity.y());
         }
         if (yColliding) {
-            newY = c.y() - velocity.y();
+            newY = getCoordinate().y() - velocity.y();
             velocity = new Vector(velocity.x(), velocity.y()/2);
         }
         Coordinate newC = new Coordinate(newX, newY);
-        hitbox = new Rectangle((int)(newC.x() - 16), (int)(newC.y() - 16), 32, 32);
+        setHBox(new Rectangle((int)(newC.x() - 16), (int)(newC.y() - 16), 32, 32));
         updateState(newC);
-    }
-
-    public void place(Coordinate c) {
-        hitbox = new Rectangle((int)(c.x() - 16), (int)(c.y() - 16), 32, 32);
-        updateState(c);
     }
 
     private void airResistance() {
@@ -113,10 +84,15 @@ public class Ship extends Observer<Info> implements Entity {
     }
 
     private void updateState(Coordinate c) {
-        Info oldInfo = new Info(this.c, this.hitbox);
-        Info newInfo = new Info(c, this.hitbox);
-        this.c = c;
+        Info oldInfo = new Info(this.getCoordinate(), this.getHBox());
+        Info newInfo = new Info(c, this.getHBox());
+        setCoordinate(c);
         notifyListeners(oldInfo, newInfo);
+    }
+
+    public void place(Coordinate c) {
+        setHBox(new Rectangle((int)(c.x() - 16), (int)(c.y() - 16), 32, 32));
+        updateState(c);
     }
 
 }
