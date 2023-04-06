@@ -10,6 +10,7 @@ public class ViewFrame extends JFrame {
     public ViewFrame() {
         int x = Integer.parseInt(res.getString("FRAME_X"));
         int y = Integer.parseInt(res.getString("FRAME_Y"));
+        setTitle(res.getString("FRAME_TITLE"));
         setSize(x, y);
         setLocationRelativeTo(null);  
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  

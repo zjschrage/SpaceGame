@@ -50,7 +50,7 @@ public class ViewField extends JPanel {
             double yOffset = camera.getYOffset();
             for (Drawable e : entitiesList) {
                 g2d.drawImage(e.getImage(), (int) (e.getDrawPosition().x() - xOffset), (int) (e.getDrawPosition().y() - yOffset), null);
-                g2d.drawRect((int)(e.getHitBox().x - xOffset), (int)(e.getHitBox().y - yOffset), e.getHitBox().width, e.getHitBox().height);
+                //g2d.drawRect((int)(e.getHitBox().x - xOffset), (int)(e.getHitBox().y - yOffset), e.getHitBox().width, e.getHitBox().height);
             }
         } catch (ConcurrentModificationException e) {
 
