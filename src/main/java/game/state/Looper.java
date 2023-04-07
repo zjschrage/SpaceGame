@@ -6,6 +6,11 @@ public class Looper implements Runnable {
 
     private ResourceBundle res = ResourceBundle.getBundle("game_properties");
     private int FPS = Integer.parseInt(res.getString("FPS"));
+    private State menu;
+
+    public Looper(State menu) {
+        this.menu = menu;
+    }
     @Override
     public void run() {
         long quanta = 1000000000/FPS;
@@ -18,8 +23,12 @@ public class Looper implements Runnable {
             last = now;
             if (delta > quanta) {
                 delta = 0;
-                State.getState().tick();
-                State.getState().render();
+                try {
+                    State.getState().tick();
+                    State.getState().render();
+                } catch(RuntimeException e) {
+                    State.setState(menu);
+                }
             }
         }
     }

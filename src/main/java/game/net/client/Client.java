@@ -12,7 +12,6 @@ import java.net.*;
 public class Client {
 
     private Socket socket = null;
-    private BufferedReader input = null;
     private DataInputStream in = null;
     private DataOutputStream out = null;
     private ClientInformation info;
@@ -108,7 +107,6 @@ public class Client {
 
     private void close() {
         try {
-            input.close();
             in.close();
             out.close();
             socket.close();

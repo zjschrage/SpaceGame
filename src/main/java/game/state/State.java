@@ -12,6 +12,7 @@ public abstract class State {
         return state;
     }
 
+    public abstract void init();
     public abstract void tick();
     public abstract void render();
 }

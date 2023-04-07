@@ -14,6 +14,9 @@ import game.view.gameview.GameViewField;
 import game.view.ViewFrame;
 import game.view.assets.Assets;
 
+import javax.swing.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +27,11 @@ public class GameState extends State {
     private ResourceBundle res = ResourceBundle.getBundle("game_properties");
     private String worldFileName = res.getString("WORLD_FILE_NAME");
     private double acceleration = Double.parseDouble(res.getString("ACCELERATION"));
+
+    private ResourceBundle resView = ResourceBundle.getBundle("view_properties");
+    private int x = Integer.parseInt(resView.getString("FRAME_X"));
+    private int y = Integer.parseInt(resView.getString("FRAME_Y"));
+    private String title = resView.getString("FRAME_TITLE");
 
     private Assets assets;
     private KeyboardHandler kh;
@@ -37,9 +45,6 @@ public class GameState extends State {
     private Client client;
 
     public GameState() throws IOException {
-        init();
-        generateTerrain();
-        this.ship = EntityFactories.createShip(worldState, field, new Coordinate(400, 400));
         this.playerShips = new HashMap<>();
     }
 
@@ -52,7 +57,8 @@ public class GameState extends State {
     public WorldState getWorldState() {return worldState;}
     public GameViewField getViewField() {return field;}
 
-    private void init() {
+    @Override
+    public void init() {
         assets = new Assets();
         kh = new KeyboardHandler();
 
@@ -61,10 +67,19 @@ public class GameState extends State {
 
         //Frontend
         camera = new Camera(0, 0);
-        frame = new ViewFrame();
-        field = new GameViewField(camera);
+        frame = new ViewFrame(x, y, title, WindowConstants.DISPOSE_ON_CLOSE);
+        windowListener();
+        field = new GameViewField(camera, x, y);
         frame.addPanelComponent(field);
         field.addKeyListener(kh);
+
+        ship = EntityFactories.createShip(worldState, field, new Coordinate(400, 400));
+
+        try {
+            generateTerrain();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void generateTerrain() throws IOException {
@@ -112,6 +127,31 @@ public class GameState extends State {
                 }
             }
         }
+    }
+
+    private void windowListener() {
+        frame.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {}
+            @Override
+            public void windowClosing(WindowEvent e) {}
+            @Override
+            public void windowClosed(WindowEvent e) {
+                try {
+                    client.sendMessage(MessageType.CLOSE);
+                } catch (IOException ioe) {
+                    throw new RuntimeException(ioe);
+                }
+            }
+            @Override
+            public void windowIconified(WindowEvent e) {}
+            @Override
+            public void windowDeiconified(WindowEvent e) {}
+            @Override
+            public void windowActivated(WindowEvent e) {}
+            @Override
+            public void windowDeactivated(WindowEvent e) {}
+        });
     }
 
 }
