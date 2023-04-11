@@ -25,8 +25,9 @@ public class Assets {
 
     private static void loadSprites() {
         loadSpriteSheet("spritesheet.png", 0);
-        addImage(AssetEnum.SHIP, 0, 0, 0, 32, 32);
+        addImage(AssetEnum.SHIP, 0, 32, 0, 32, 32);
         addImage(AssetEnum.WALL, 0, 32*2, 32*3, 32, 32);
+        addImage(AssetEnum.BULLET, 0, 24, 32*2 + 16, 8, 8);
     }
 
     private static void loadSpriteSheet(String path, int id) {

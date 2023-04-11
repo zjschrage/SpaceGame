@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 
 public class Data {
 
-    public static void encodeData(Ship ship, byte[] body) {
+    public static void encodeShipData(Ship ship, byte[] body) {
         Coordinate c = ship.getCoordinate();
 
         byte[] xBytes = new byte[8];
@@ -28,7 +28,7 @@ public class Data {
         }
     }
 
-    public static Coordinate extractCoordinate(byte[] body) {
+    public static Coordinate extractShipCoordinate(byte[] body) {
         byte[] xBytes = new byte[8];
         byte[] yBytes = new byte[8];
         for (int i = 0; i < 8; i++) {

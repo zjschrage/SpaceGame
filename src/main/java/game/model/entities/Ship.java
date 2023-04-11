@@ -1,17 +1,31 @@
 package game.model.entities;
 
+import game.io.KeyboardHandler;
 import game.model.utils.Coordinate;
 import game.model.utils.Vector;
 import game.model.world.WorldState;
+import game.utils.EntityFactories;
 import game.utils.Info;
-import game.utils.Observer;
+import game.view.ViewField;
+import game.view.gameview.GameViewField;
+
 import java.awt.*;
+import java.util.ResourceBundle;
 
 public class Ship extends Entity<Info> {
 
     private static final double MAXIMUM_VELOCITY = 6;
 
+    private ResourceBundle res = ResourceBundle.getBundle("game_properties");
+    private double acceleration = Double.parseDouble(res.getString("ACCELERATION"));
+    private int bulletSpeed = 1000000000 / Integer.parseInt(res.getString("BULLET_PER_SECOND"));
+
+    private ResourceBundle resView = ResourceBundle.getBundle("view_properties");
+    private int size = Integer.parseInt(resView.getString("DEFAULT_TILE_SIZE"));
+
     private WorldState worldState;
+    private ViewField field;
+    private KeyboardHandler kh;
     private int hp;
     private Vector velocity;
 
@@ -19,16 +33,30 @@ public class Ship extends Entity<Info> {
     private double b_decay = 0.99;
     private double epsilon_decay = 0.2;
 
+    private long shootTimer = System.nanoTime();
 
-    public Ship(WorldState worldState, Coordinate c) {
-        super(c);
+    public Ship(WorldState worldState, ViewField field, Coordinate c, int xSize, int ySize) {
+        super(c, xSize, ySize);
         this.worldState = worldState;
+        this.field = field;
         this.hp = 100;
         this.velocity = new Vector(0, 0);
+        this.kh = new KeyboardHandler();
+        field.addKeyListener(kh);
+    }
+
+    @Override
+    public void tick() {
+        move();
+        handleInput();
     }
 
     public int getHp() {
         return hp;
+    }
+
+    public Vector getVelocity() {
+        return velocity;
     }
 
     public void accelerate(Vector accel) {
@@ -63,8 +91,8 @@ public class Ship extends Entity<Info> {
             velocity = new Vector(velocity.x(), velocity.y()/2);
         }
         Coordinate newC = new Coordinate(newX, newY);
-        setHBox(new Rectangle((int)(newC.x() - 16), (int)(newC.y() - 16), 32, 32));
-        updateState(newC);
+        Rectangle newHitbox = new Rectangle((int)(newC.x() - size/2), (int)(newC.y() - size/2), size, size);
+        updateState(newC, newHitbox);
     }
 
     private void airResistance() {
@@ -83,16 +111,42 @@ public class Ship extends Entity<Info> {
         velocity = new Vector(vx, vy);
     }
 
-    private void updateState(Coordinate c) {
+    private void updateState(Coordinate c, Rectangle hitbox) {
         Info oldInfo = new Info(this.getCoordinate(), this.getHBox());
-        Info newInfo = new Info(c, this.getHBox());
+        Info newInfo = new Info(c, getHBox());
         setCoordinate(c);
+        setHBox(hitbox);
         notifyListeners(oldInfo, newInfo);
     }
 
     public void place(Coordinate c) {
-        setHBox(new Rectangle((int)(c.x() - 16), (int)(c.y() - 16), 32, 32));
-        updateState(c);
+        Rectangle newHitbox = new Rectangle((int)(c.x() - size/2), (int)(c.y() - size/2), size, size);
+        updateState(c, newHitbox);
+    }
+
+    private void handleInput() {
+        if (kh.getKeys().size() > 0) {
+            for (Character c : kh.getKeys()) {
+                switch(c) {
+                    case 'w' -> accelerate(new Vector(0, -acceleration));
+                    case 'a' -> accelerate(new Vector(-acceleration, 0));
+                    case 's' -> accelerate(new Vector(0, acceleration));
+                    case 'd' -> accelerate(new Vector(acceleration, 0));
+                    case ' ' -> {
+                        if ((System.nanoTime() - shootTimer) < bulletSpeed) continue;
+                        else shootTimer = System.nanoTime();
+                        double dx = getVelocity().x();
+                        double dy = getVelocity().y();
+                        double f = (double)size / Math.max(Math.abs(dx), Math.abs(dy));
+                        dx *= f;
+                        dy *= f;
+                        Coordinate cord = new Coordinate(getCoordinate().x() + dx, getCoordinate().y() + dy);
+                        Vector velocity = new Vector(getVelocity().x()*2,getVelocity().y()*2);
+                        EntityFactories.createBullet(worldState, (GameViewField)field, cord, velocity, true);
+                    }
+                }
+            }
+        }
     }
 
 }

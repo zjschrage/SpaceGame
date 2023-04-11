@@ -6,5 +6,5 @@ import game.model.world.WorldState;
 import game.view.gameview.GameViewField;
 
 public interface EntityFactory {
-    public Entity createEntity(WorldState worldState, GameViewField field, Coordinate c);
+    public Entity createEntity(WorldState worldState, GameViewField field, Coordinate c, boolean jurisdiction);
 }

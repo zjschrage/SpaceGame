@@ -1,6 +1,8 @@
 package game.net.client;
 
+import game.model.entities.Bullet;
 import game.model.utils.Coordinate;
+import game.model.utils.Vector;
 import game.net.message.Data;
 import game.net.message.Message;
 import game.net.message.MessageType;
@@ -60,9 +62,8 @@ public class ClientReciever implements Runnable {
                 break;
             case DATA_REPORT:
                 updatePlayerShip(m);
+                //addTransientEntity(m);
                 break;
-//            case DISCONNECT:
-//                disconnectPlayerShip(m);
             default:
         }
         return true;
@@ -83,8 +84,8 @@ public class ClientReciever implements Runnable {
     private void registerPlayerShip(Message m) {
         if (m.src == info.id) return;
         int newPlayerId = m.src;
-        if (handler.getPlayerShips().containsKey(newPlayerId)) return;
-        handler.getPlayerShips().put(newPlayerId, EntityFactories.createShip(handler.getWorldState(), handler.getField(), new Coordinate(400, 400)));
+        if (handler.getWorldState().getExternalShips().containsKey(newPlayerId)) return;
+        handler.getWorldState().getExternalShips().put(newPlayerId, EntityFactories.createShip(handler.getWorldState(), handler.getField(), new Coordinate(400, 400), false));
         timeout.put(newPlayerId, System.currentTimeMillis());
         System.out.println("Player Connected with ID " + newPlayerId);
     }
@@ -92,18 +93,16 @@ public class ClientReciever implements Runnable {
     private void updatePlayerShip(Message m) {
         if (m.src == info.id) return;
         int id = m.src;
-        if (!(handler.getPlayerShips().containsKey((id)))) return;
-        Coordinate c = Data.extractCoordinate(m.body);
-        handler.getPlayerShips().get(id).place(c);
+        if (!(handler.getWorldState().getExternalShips().containsKey((id)))) return;
+        Coordinate c = Data.extractShipCoordinate(m.body);
+        handler.getWorldState().getExternalShips().get(id).place(c);
         timeout.put(id, System.currentTimeMillis());
     }
 
-//    private void disconnectPlayerShip(Message m) {
-//        if (m.src == info.id) return;
-//        int id = m.src;
-//        handler.getPlayerShips().get(id).detatchListeners();
-//        handler.getPlayerShips().remove(id);
-//        System.out.println("Player with ID " + id + " Disconnected");
-//    }
+    private void addTransientEntity(Message m) {
+        if (m.src == info.id) return;
+        Bullet b = EntityFactories.createBullet(handler.getWorldState(), handler.getField(), new Coordinate(400, 400), new Vector(1, 1),false);
+        handler.getWorldState().addExternalEntity(b);
+    }
 
 }

@@ -11,11 +11,12 @@ public abstract class Entity<T> extends Observer<T> {
     private Coordinate coordinate;
     private boolean active;
 
-    public Entity(Coordinate c) {
-        this.hitbox = new Rectangle((int) c.x() - 16, (int) c.y() - 16, 32, 32);
+    public Entity(Coordinate c, int xSize, int ySize) {
+        this.hitbox = new Rectangle((int) c.x() - xSize/2, (int) c.y() - ySize/2, xSize, ySize);
         this.coordinate = c;
         this.active = true;
     }
+    public abstract void tick();
 
     public Rectangle getHBox() {
         return hitbox;

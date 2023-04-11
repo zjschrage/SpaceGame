@@ -45,7 +45,7 @@ public class WorldParser {
                 continue;
             }
             Coordinate c = new Coordinate(32*(row++) + 16, 32*col + 16);
-            factoryFunctionMapper.get(i).createEntity(worldState, field, c);
+            factoryFunctionMapper.get(i).createEntity(worldState, field, c, true);
         }
         br.close();
         tilesInRow = row;

@@ -16,9 +16,9 @@ public class DisconnectTimer {
                 Queue<Integer> removeQueue = new LinkedList<>();
                 for (Integer i : timeout.keySet()) {
                     if (System.currentTimeMillis() - timeout.get(i) > TIMEOUT) {
-                        handler.getPlayerShips().get(i).detachListeners();
-                        handler.getPlayerShips().get(i).setInactive();
-                        handler.getPlayerShips().remove(i);
+                        handler.getWorldState().getExternalShips().get(i).detachListeners();
+                        handler.getWorldState().getExternalShips().get(i).setInactive();
+                        handler.getWorldState().getExternalShips().remove(i);
                         removeQueue.add(i);
                         System.out.println("Player with ID " + i + " Disconnected");
                     }

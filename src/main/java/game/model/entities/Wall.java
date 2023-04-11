@@ -6,8 +6,13 @@ import java.awt.*;
 
 public class Wall extends Entity<Integer> {
 
-    public Wall(Coordinate c) {
-        super(c);
+    public Wall(Coordinate c, int xSize, int ySize) {
+        super(c, xSize, ySize);
+    }
+
+    @Override
+    public void tick() {
+
     }
 
 }

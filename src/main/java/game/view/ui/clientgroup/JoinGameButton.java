@@ -25,7 +25,7 @@ public class JoinGameButton extends UIButton {
             GameState game = new GameState();
             game.init();
 
-            Handler handler = new Handler(game.getShip(), game.getPlayerShips(), game.getWorldState(), game.getViewField());
+            Handler handler = new Handler(game.getShip(), game.getWorldState(), game.getViewField());
 
             Client client = new Client(ipEntryField.getText(), 5000);
             client.setupClientReciever(handler);

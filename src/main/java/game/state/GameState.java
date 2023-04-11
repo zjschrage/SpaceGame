@@ -1,6 +1,7 @@
 package game.state;
 
 import game.io.KeyboardHandler;
+import game.model.entities.Entity;
 import game.model.entities.Ship;
 import game.model.utils.Coordinate;
 import game.model.utils.Vector;
@@ -19,6 +20,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -26,7 +28,6 @@ public class GameState extends State {
 
     private ResourceBundle res = ResourceBundle.getBundle("game_properties");
     private String worldFileName = res.getString("WORLD_FILE_NAME");
-    private double acceleration = Double.parseDouble(res.getString("ACCELERATION"));
 
     private ResourceBundle resView = ResourceBundle.getBundle("view_properties");
     private int x = Integer.parseInt(resView.getString("FRAME_X"));
@@ -34,18 +35,16 @@ public class GameState extends State {
     private String title = resView.getString("FRAME_TITLE");
 
     private Assets assets;
-    private KeyboardHandler kh;
     private WorldState worldState;
     private ViewFrame frame;
     private GameViewField field;
     private Camera camera;
     private Ship ship;
-    private Map<Integer, Ship> playerShips;
 
     private Client client;
 
     public GameState() throws IOException {
-        this.playerShips = new HashMap<>();
+
     }
 
     public void associateClient(Client client) {
@@ -53,14 +52,12 @@ public class GameState extends State {
     }
 
     public Ship getShip() {return ship;}
-    public Map<Integer, Ship> getPlayerShips() {return playerShips;}
     public WorldState getWorldState() {return worldState;}
     public GameViewField getViewField() {return field;}
 
     @Override
     public void init() {
         assets = new Assets();
-        kh = new KeyboardHandler();
 
         //Backend
         worldState = new WorldState();
@@ -71,9 +68,8 @@ public class GameState extends State {
         windowListener();
         field = new GameViewField(camera, x, y);
         frame.addPanelComponent(field);
-        field.addKeyListener(kh);
 
-        ship = EntityFactories.createShip(worldState, field, new Coordinate(400, 400));
+        ship = EntityFactories.createShip(worldState, field, new Coordinate(400, 400), true);
 
         try {
             generateTerrain();
@@ -91,19 +87,11 @@ public class GameState extends State {
     }
     @Override
     public void tick() {
-        handleInput(kh, ship);
         shiftCamera();
         camera.centerOnEntity(ship);
-        ship.move();
-        try {
-            client.sendMessage(MessageType.DATA_REPORT);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        for (Integer shipId : playerShips.keySet()) {
-            Ship pShip = playerShips.get(shipId);
-            pShip.place(pShip.getCoordinate());
-        }
+        worldState.checkActive();
+        worldState.tickAll();
+        broadcastEntityData();
     }
 
     @Override
@@ -116,16 +104,11 @@ public class GameState extends State {
         camera.setYOffset(ship.getCoordinate().y());
     }
 
-    private void handleInput(KeyboardHandler kh, Ship s) {
-        if (kh.getKeys().size() > 0) {
-            for (Character c : kh.getKeys()) {
-                switch(c) {
-                    case 'w' -> s.accelerate(new Vector(0, -acceleration));
-                    case 'a' -> s.accelerate(new Vector(-acceleration, 0));
-                    case 's' -> s.accelerate(new Vector(0, acceleration));
-                    case 'd' -> s.accelerate(new Vector(acceleration, 0));
-                }
-            }
+    private void broadcastEntityData() {
+        try {
+            client.sendMessage(MessageType.DATA_REPORT);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

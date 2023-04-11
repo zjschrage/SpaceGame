@@ -7,7 +7,9 @@ public abstract class UIButton extends Button implements ActionListener {
 
     public UIButton(UIInfoRecord bir) {
         setLabel(bir.name());
-        setBounds(bir.x(), bir.y(), bir.width(), bir.height());
+        setLocation(bir.x(), bir.y());
+        setSize(bir.width(), bir.height());
+        //setBounds(bir.x(), bir.y(), bir.width(), bir.height());
         setVisible(true);
     }
 

@@ -9,24 +9,17 @@ import java.util.Map;
 public class Handler {
 
     private Ship ownShip;
-    private Map<Integer, Ship> playerShips;
     private WorldState worldState;
+    private GameViewField field;
 
-    public Handler(Ship ownShip, Map<Integer, Ship> playerShips, WorldState worldState, GameViewField field) {
+    public Handler(Ship ownShip, WorldState worldState, GameViewField field) {
         this.ownShip = ownShip;
-        this.playerShips = playerShips;
         this.worldState = worldState;
         this.field = field;
     }
 
-    private GameViewField field;
-
     public Ship getOwnShip() {
         return ownShip;
-    }
-
-    public Map<Integer, Ship> getPlayerShips() {
-        return playerShips;
     }
 
     public WorldState getWorldState() {

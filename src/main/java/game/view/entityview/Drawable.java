@@ -15,11 +15,11 @@ public abstract class Drawable {
     private Rectangle hitbox;
     private boolean active;
 
-    public Drawable(AssetEnum assetEnum, Coordinate c) {
+    public Drawable(AssetEnum assetEnum, Coordinate c, int xSize, int ySize) {
         this.image = Assets.getImage(assetEnum);
         this.centroid = new Coordinate(image.getWidth()/2, image.getHeight()/2);
         this.position = c;
-        this.hitbox = new Rectangle((int)c.x() - 16, (int)c.y() - 16, 32, 32);
+        this.hitbox = new Rectangle((int)c.x() - xSize/2, (int)c.y() - ySize/2, xSize, ySize);
         this.active = true;
     }
 

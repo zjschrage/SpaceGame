@@ -6,8 +6,8 @@ import game.view.assets.AssetEnum;
 
 public class WallView extends Drawable implements Listener<Integer> {
 
-    public WallView(Coordinate c) {
-        super(AssetEnum.WALL, c);
+    public WallView(Coordinate c, int xSize, int ySize) {
+        super(AssetEnum.WALL, c, xSize, ySize);
     }
 
     @Override

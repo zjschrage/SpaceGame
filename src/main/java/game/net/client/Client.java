@@ -81,7 +81,8 @@ public class Client {
         m.dst = (byte) -1;
         m.scope = (byte) MessageScope.BROADCAST.ordinal();
         m.type = (byte) MessageType.DATA_REPORT.ordinal();
-        Data.encodeData(handler.getOwnShip(), m.body);
+        Data.encodeShipData(handler.getOwnShip(), m.body);
+        //Data.encodeEntityData(handler.getOwnShip(), m.body);
         send(m);
     }
 

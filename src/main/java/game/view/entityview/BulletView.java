@@ -5,10 +5,9 @@ import game.utils.Info;
 import game.utils.Listener;
 import game.view.assets.AssetEnum;
 
-public class ShipView extends Drawable implements Listener<Info> {
-
-    public ShipView(Coordinate c, int xSize, int ySize) {
-        super(AssetEnum.SHIP, c, xSize, ySize);
+public class BulletView extends Drawable implements Listener<Info> {
+    public BulletView(Coordinate c, int xSize, int ySize) {
+        super(AssetEnum.BULLET, c, xSize, ySize);
     }
 
     @Override
@@ -21,5 +20,4 @@ public class ShipView extends Drawable implements Listener<Info> {
     public void destroy() {
         setInactive();
     }
-
 }

@@ -5,9 +5,10 @@ import java.awt.event.ActionListener;
 
 public abstract class UILabel extends JLabel implements ActionListener {
 
-    public UILabel(UIInfoRecord bir) {
-        setText(bir.name());
-        setBounds(bir.x(), bir.y(), bir.width(), bir.height());
+    public UILabel(UIInfoRecord uir) {
+        setText(uir.name());
+        setLocation(uir.x(), uir.y());
+        setSize(uir.width(), uir.height());
         setVisible(true);
     }
 
